@@ -66,29 +66,72 @@ public class VehicleDao {
                 WHERE price
                 BETWEEN (?,?);
                 """;
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setDouble(1, minPrice);
             statement.setDouble(2, maxPrice);
             statement.executeUpdate();
 
-            ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Vehicle vehicle = new Vehicle();
+                do {
+                    vehicle.setVin(resultSet.getString("VIN"));
+                    vehicle.setMake(resultSet.getString("make"));
+                    vehicle.setModel(resultSet.getString("model"));
+                    vehicle.setYear(resultSet.getInt("year"));
+                    vehicle.setSold(resultSet.getBoolean("SOLD"));
+                    resultSet.getString("color");
+                    resultSet.getString("vehicleType");
+                    resultSet.getInt("odometer");
+                    resultSet.getDouble("price");
+                    vehicles.add(new Vehicle());
+
+                } while (resultSet.next());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return new ArrayList<>();
+        return vehicles;
     }
 
-    public List<Vehicle> searchByMakeModel(String make, String model) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String sql = """
-                SELECT * FROM vehicles v
-                WHERE make AND model
-                LIKE(?,?);
-                """;
-        return new ArrayList<>();
-    }
+
+        public List<Vehicle> searchByMakeModel(String make, String model) {
+            List<Vehicle> vehicles = new ArrayList<>();
+            String sql = """
+                    SELECT * FROM vehicles v
+                    WHERE make AND model
+                    LIKE(?,?);
+                    """;
+
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, make);
+                statement.setString(2, model);
+                statement.executeUpdate();
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    Vehicle vehicle = new Vehicle();
+                    do {
+                        vehicle.setVin(resultSet.getString("VIN"));
+                        vehicle.setMake(resultSet.getString("make"));
+                        vehicle.setModel(resultSet.getString("model"));
+                        vehicle.setYear(resultSet.getInt("year"));
+                        vehicle.setSold(resultSet.getBoolean("SOLD"));
+                        resultSet.getString("color");
+                        resultSet.getString("vehicleType");
+                        resultSet.getInt("odometer");
+                        resultSet.getDouble("price");
+                        vehicles.add(new Vehicle());
+
+                    } while (resultSet.next());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return vehicles;
+        }
 
     public List<Vehicle> searchByYearRange(int minYear, int maxYear) {
         List<Vehicle> vehicles = new ArrayList<>();
@@ -97,8 +140,35 @@ public class VehicleDao {
                 WHERE year
                 BETWEEN (?,?);
                 """;
-        return new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, minYear);
+            statement.setInt(2, maxYear);
+            statement.executeUpdate();
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Vehicle vehicle = new Vehicle();
+                do {
+                    vehicle.setVin(resultSet.getString("VIN"));
+                    vehicle.setMake(resultSet.getString("make"));
+                    vehicle.setModel(resultSet.getString("model"));
+                    vehicle.setYear(resultSet.getInt("year"));
+                    vehicle.setSold(resultSet.getBoolean("SOLD"));
+                    resultSet.getString("color");
+                    resultSet.getString("vehicleType");
+                    resultSet.getInt("odometer");
+                    resultSet.getDouble("price");
+                    vehicles.add(new Vehicle());
+
+                } while (resultSet.next());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return vehicles;
     }
+
 
     public List<Vehicle> searchByColor(String color) {
         List<Vehicle> vehicles = new ArrayList<>();
@@ -107,7 +177,32 @@ public class VehicleDao {
                 WHERE color
                 LIKE (?);
                 """;
-        return new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, color);
+            statement.executeUpdate();
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Vehicle vehicle = new Vehicle();
+                do {
+                    vehicle.setVin(resultSet.getString("VIN"));
+                    vehicle.setMake(resultSet.getString("make"));
+                    vehicle.setModel(resultSet.getString("model"));
+                    vehicle.setYear(resultSet.getInt("year"));
+                    vehicle.setSold(resultSet.getBoolean("SOLD"));
+                    resultSet.getString("color");
+                    resultSet.getString("vehicleType");
+                    resultSet.getInt("odometer");
+                    resultSet.getDouble("price");
+                    vehicles.add(new Vehicle());
+
+                } while (resultSet.next());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return vehicles;
     }
 
     public List<Vehicle> searchByMileageRange(int minMileage, int maxMileage) {
@@ -117,7 +212,33 @@ public class VehicleDao {
                 WHERE mileage
                 BETWEEN (?,?);
                 """;
-        return new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, minMileage);
+            statement.setInt(2, maxMileage);
+            statement.executeUpdate();
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Vehicle vehicle = new Vehicle();
+                do {
+                    vehicle.setVin(resultSet.getString("VIN"));
+                    vehicle.setMake(resultSet.getString("make"));
+                    vehicle.setModel(resultSet.getString("model"));
+                    vehicle.setYear(resultSet.getInt("year"));
+                    vehicle.setSold(resultSet.getBoolean("SOLD"));
+                    resultSet.getString("color");
+                    resultSet.getString("vehicleType");
+                    resultSet.getInt("odometer");
+                    resultSet.getDouble("price");
+                    vehicles.add(new Vehicle());
+
+                } while (resultSet.next());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return vehicles;
     }
 
     public List<Vehicle> searchByType(String type) {
@@ -127,8 +248,37 @@ public class VehicleDao {
                 WHERE type
                 LIKE (?);
                 """;
-        return new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, type);
+            statement.executeUpdate();
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Vehicle vehicle = new Vehicle();
+                do {
+                    vehicle.setVin(resultSet.getString("VIN"));
+                    vehicle.setMake(resultSet.getString("make"));
+                    vehicle.setModel(resultSet.getString("model"));
+                    vehicle.setYear(resultSet.getInt("year"));
+                    vehicle.setSold(resultSet.getBoolean("SOLD"));
+                    resultSet.getString("color");
+                    resultSet.getString("vehicleType");
+                    resultSet.getInt("odometer");
+                    resultSet.getDouble("price");
+
+                    vehicles.add(new Vehicle());
+
+                } while (resultSet.next());
+
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return vehicles;
     }
+
 
     private Vehicle createVehicleFromResultSet(ResultSet resultSet) throws SQLException {
         Vehicle vehicle = new Vehicle();
