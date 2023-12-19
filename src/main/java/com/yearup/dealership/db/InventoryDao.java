@@ -23,7 +23,7 @@ public class InventoryDao {
     public void addVehicleToInventory(String vin, int dealershipId) {
         String sql = """
                 INSERT INTO inventory (vin , dealershipId)
-                VALUES(?,?)
+                VALUES(?,?);
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)){
           statement.setString(1, vin);
@@ -42,7 +42,7 @@ public class InventoryDao {
     public void removeVehicleFromInventory(String vin) {
         String sql = """
                 DELETE FROM inventory (vin)
-                VALUES(?)
+                VALUES(?);
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,vin);

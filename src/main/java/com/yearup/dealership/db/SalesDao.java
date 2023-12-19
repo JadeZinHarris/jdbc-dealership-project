@@ -21,7 +21,7 @@ public class SalesDao {
     public void addSalesContract(SalesContract salesContract) {
         String sql = """
                 INSERT INTO salesContract (contractId, vin, saleDate, price )
-                VALUES(?,?,?,?)
+                VALUES(?,?,?,?);
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, salesContract.getContractId());

@@ -22,7 +22,7 @@ public class LeaseDao {
     public void addLeaseContract(LeaseContract leaseContract) {
         String sql = """
                INSERT INTO salesContract (contractId, vin, leaseStart, leaseEnd, monthlyPayment )
-                VALUES(?,?,?,?,?)
+                VALUES(?,?,?,?,?);
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)){

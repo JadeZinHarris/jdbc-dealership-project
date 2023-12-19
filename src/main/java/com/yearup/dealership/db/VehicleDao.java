@@ -20,16 +20,36 @@ public class VehicleDao {
     }
 
     public void addVehicle(Vehicle vehicle) {
+        String sql = """
+                INSERT INTO  FROM vehicle
+                VALUES(?,?,?,?,?,?,?,?,?);
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, vehicle.getVin());
+            statement.setString(2,vehicle.getMake());
+            statement.setString(3, vehicle.getModel());
+            statement.setInt(4,vehicle.getYear());
+            statement.setBoolean(5, vehicle.isSold());
+            statement.setString(6,vehicle.getColor());
+            statement.setString(7, vehicle.getVehicleType());
+            statement.setInt(8,vehicle.getOdometer());
+            statement.setDouble(9,vehicle.getPrice());
+
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     public void removeVehicle(String VIN) {
         String sql = """
                 DELETE FROM vehicle (vin)
-                VALUES(?)
+                VALUES(?);
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.clearBatch();
+            statement.setString(1,VIN);
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -40,13 +60,15 @@ public class VehicleDao {
     }
 
     public List<Vehicle> searchByPriceRange(double minPrice, double maxPrice) {
+        List<Vehicle> vehicles = new ArrayList<>();
         String sql = """
-                SELECT * FROM vehicles AS v
-                JOIN inventory AS i ON v.vin = i.vin
-                WHERE price;
+                SELECT * FROM vehicles
+                WHERE price
+                BETWEEN (?,?);
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.
+            statement.setDouble(1, minPrice);
+            statement.setDouble(2, maxPrice);
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -59,46 +81,51 @@ public class VehicleDao {
     }
 
     public List<Vehicle> searchByMakeModel(String make, String model) {
+        List<Vehicle> vehicles = new ArrayList<>();
         String sql = """
-                SELECT * FROM vehicles AS v
-                JOIN inventory AS i ON v.vin = i.vin
-                WHERE model;
+                SELECT * FROM vehicles v
+                WHERE make AND model
+                LIKE(?,?);
                 """;
         return new ArrayList<>();
     }
 
     public List<Vehicle> searchByYearRange(int minYear, int maxYear) {
+        List<Vehicle> vehicles = new ArrayList<>();
         String sql = """
-               SELECT * FROM vehicles AS v
-                JOIN inventory AS i ON v.vin = i.vin
-                WHERE year;
+               SELECT * FROM vehicles
+                WHERE year
+                BETWEEN (?,?);
                 """;
         return new ArrayList<>();
     }
 
     public List<Vehicle> searchByColor(String color) {
+        List<Vehicle> vehicles = new ArrayList<>();
           String sql = """
-              SELECT * FROM vehicles AS v
-                JOIN inventory AS i ON v.vin = i.vin
-                WHERE color;
+              SELECT * FROM vehicles
+                WHERE color
+                LIKE (?);
                 """;
         return new ArrayList<>();
     }
 
     public List<Vehicle> searchByMileageRange(int minMileage, int maxMileage) {
+        List<Vehicle> vehicles = new ArrayList<>();
         String sql = """
-               SELECT * FROM vehicles AS v
-                JOIN inventory AS i ON v.vin = i.vin
-                WHERE mileage;
+              SELECT * FROM vehicles
+                WHERE mileage
+                BETWEEN (?,?);
                 """;
         return new ArrayList<>();
     }
 
     public List<Vehicle> searchByType(String type) {
+        List<Vehicle> vehicles = new ArrayList<>();
         String sql = """
-              SELECT * FROM vehicles AS v
-                JOIN inventory AS i ON v.vin = i.vin
-                WHERE type;
+              SELECT * FROM vehicles
+                WHERE type
+                LIKE (?);
                 """;
         return new ArrayList<>();
     }
