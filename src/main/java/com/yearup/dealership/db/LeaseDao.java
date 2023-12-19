@@ -3,10 +3,7 @@ package com.yearup.dealership.db;
 import com.yearup.dealership.models.LeaseContract;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class LeaseDao {
     private DataSource dataSource;
@@ -31,8 +28,8 @@ public class LeaseDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, leaseContract.getContractId());
             statement.setString(2,leaseContract.getVin());
-            statement.setLocalDate(3,leaseContract.getLeaseStart());
-            statement.setDate(4,leaseContract.getLeaseEnd());
+            statement.setDate(3, Date.valueOf(leaseContract.getLeaseStart()));
+            statement.setDate(4,Date.valueOf(leaseContract.getLeaseEnd()));
             statement.setDouble(5,leaseContract.getMonthlyPayment());
             statement.executeUpdate();
 
@@ -45,3 +42,6 @@ public class LeaseDao {
         }
     }
 }
+
+
+//https://stackoverflow.com/questions/33184096/date-new-date-date-valueof-vs-date-now

@@ -45,7 +45,7 @@ public class InventoryDao {
                 VALUES(?)
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.clearBatch();
+            statement.setString(1,vin);
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
